@@ -41,7 +41,7 @@ jobs:
         run: docker build -t backend .
       -
         name: docker tag rename
-        run: docker tag backend ${{ secrets.azure_registry }}/backend
+        run: docker tag backend ${{ secrets.azure_registry_login_server }}/backend
         
       - name: docker push
         run: docker push ${{ secrets.azure_registry }}/backend
