@@ -5,14 +5,13 @@ on:
     paths:
       - backend/**
     branches: [ tb_eom ]
-    
-defaults:
-  run:
-    working-directory: /backend
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/
     steps:
       -
         name: Checkout
