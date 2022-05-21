@@ -3,13 +3,13 @@ name: backend - docker build and push
 on:
   push:
     paths:
-      - "backend/**"
+      - backend/**
     branches: [ tb_eom ]
 jobs:
   docker:
     runs-on: ubuntu-latest
     env:
-      working-directory: "./backend"
+      working-directory: ./backend
     steps:
       -
         name: Checkout
