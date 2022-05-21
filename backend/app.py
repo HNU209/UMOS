@@ -11,13 +11,10 @@ CORS(app)
 
 @app.route(f'/data/<type>')
 def get_json(type):
-    try:
-        get_data(type)
-        with open(f'{folder_loc}/json/{type}.json', 'r') as f:
-            data = json.load(f)
-        return jsonify(data)
-    except:
-        return 'error'
+    get_data(type)
+    with open(f'{folder_loc}/json/{type}.json', 'r') as f:
+        data = json.load(f)
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run()
