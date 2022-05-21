@@ -30,16 +30,16 @@ jobs:
           echo "connect_str=${{ secrets.azure_storage_connect_str }}" >> .env
           echo "container_name=${{ secrets.azure_storage_container_name }}" >> .env
           echo "trip=${{ secrets.trip }}" >> .env
-          echo "trip=${{ secrets.empty }}" >> .env
-          echo "trip=${{ secrets.ps }}" >> .env
-          echo "trip=${{ secrets.result }}" >> .env
+          echo "empty=${{ secrets.empty }}" >> .env
+          echo "ps=${{ secrets.ps }}" >> .env
+          echo "result=${{ secrets.result }}" >> .env
           cat .env
       -
         name: docker build and push
-        run: docker build -t test .
+        run: docker build -t backend .
       -
         name: docker tag rename
-        run: docker tag test ${{ secrets.azure_registry }}/test
+        run: docker tag backend ${{ secrets.azure_registry }}/backend
         
       - name: docker push
-        run: docker push ${{ secrets.azure_registry }}/test
+        run: docker push ${{ secrets.azure_registry }}/backend
