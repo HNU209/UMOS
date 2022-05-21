@@ -2,9 +2,9 @@ from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 import os
 
-folder_loc = os.path.dirname(os.path.abspath(__file__))
-
 load_dotenv()
+
+folder_loc = os.path.dirname(os.path.abspath(__file__))
 
 def get_data(type):
     client = BlobServiceClient.from_connection_string(os.environ.get('connect_str'))
