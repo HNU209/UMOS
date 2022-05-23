@@ -1,0 +1,15 @@
+.trip > *div {
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+#slider {
+    width: 30%;
+    height: 10%;
+    position: absolute;
+    left: 35%;
+    top: 85%;
+}
+#deckgl-wrapper {
+    position: static;
+}

@@ -5,6 +5,7 @@ import DeckGL from '@deck.gl/react';
 import { PolygonLayer, ScatterplotLayer, IconLayer } from '@deck.gl/layers';
 import { TripsLayer } from '@deck.gl/geo-layers';
 import Slider from '@mui/material/Slider';
+import '../css/trip.css'
 
 const MAPBOX_TOKEN = `pk.eyJ1Ijoic3BlYXI1MzA2IiwiYSI6ImNremN5Z2FrOTI0ZGgycm45Mzh3dDV6OWQifQ.kXGWHPRjnVAEHgVgLzXn2g`; // eslint-disable-line
 
@@ -40,6 +41,8 @@ const INITIAL_VIEW_STATE = {
   longitude: 126.9779692,
   latitude: 37.566535,
   zoom: 9.5,
+  minZoom: 5,
+  maxZoom: 16,
   pitch: 30,
   bearing: 0,
 };
@@ -57,19 +60,42 @@ const ICON_MAPPING = {
   marker: {x: 0, y: 0, width: 128, height: 128, mask: true}
 };
 
-function restructureData(time, data) {
-  const Arr = [];
+function splitPsData(data) {
+  const psY = [];
+  const psR = [];
+  Object.values(data).forEach(v => {
+    if (v.fail === 0) {
+      psY.push({
+        'path': v.path,
+        'timestamp': v.timestamp,
+      })
+    } else {
+      psR.push({
+        'path': v.path,
+        'timestamp': v.timestamp,
+      })
+    }
+  })
+  return [psY, psR];
+}
 
+function restructureData(time, data, type) {
+  const Arr = [];
   Object.values(data).forEach(v => {
     const path = v.path;
     const timestamp = v.timestamp;
-    const [start, end] = timestamp.length === 2 ? timestamp : [timestamp[0], timestamp[0]];
+    let [start, end] = [0, 0];
 
-    if ((time >= start) & (time <= end)) {
-      Arr.push(path);
+    if (type === 'psRed') {
+      [start, end] = [timestamp[1], timestamp[1] + 5];
+    } else {
+      [start, end] = timestamp.length === 2 ? timestamp : [timestamp[0], timestamp[0]];
+    }
+
+    if ((time >= start) && (time <= end)) {
+        Arr.push(path)
     }
   })
-
   return (Arr)
 }
 
@@ -80,8 +106,11 @@ function renderLayers(props) {
   const empty = props.empty;
   const ps = props.ps;
 
-  const emptyArr = restructureData(time, empty);
-  const psArr = restructureData(time, ps);
+  const [psY, psR] = splitPsData(ps);
+
+  const emptyArr = restructureData(time, empty, 'empty');
+  const psYellow = restructureData(time, psY, 'psYellow');
+  const psRed = restructureData(time, psR, 'psRed');
 
   return [
     new PolygonLayer({
@@ -117,8 +146,8 @@ function renderLayers(props) {
       radiusMaxPixels: 30,
     }),
     new IconLayer({
-      id: 'icon-layer',
-      data: psArr,
+      id: 'icon-layer1',
+      data: psYellow,
       sizeScale: 15,
       iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
       iconMapping: ICON_MAPPING,
@@ -131,12 +160,27 @@ function renderLayers(props) {
       radiusMinPixels: 3,
       radiusMaxPixels: 30,
     }),
+    new IconLayer({
+      id: 'icon-layer2',
+      data: psRed,
+      sizeScale: 15,
+      iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+      iconMapping: ICON_MAPPING,
+      getIcon: (d) => 'marker',
+      getSize: d => 1,
+      getPosition: (d) => [d[0], d[1]],
+      getColor: d => [255, 0, 0],
+      opacity: 0.9,
+      pickable: false,
+      radiusMinPixels: 3,
+      radiusMaxPixels: 30,
+    }),
   ];
 }
 
-export default function Main(props) {
-  const minTime = 420;
-  const maxTime = 1440;
+export default function Trip(props) {
+  const minTime = props.minTime;
+  const maxTime = props.maxTime;
   const animationSpeed = 2;
   const [time, setTime] = useState(minTime);
   const trip = props.trip
@@ -159,6 +203,10 @@ export default function Main(props) {
   }
 
   useEffect(() => {
+    props.setTime(time)
+  }, [time])
+
+  useEffect(() => {
     animate()
     return () => window.cancelAnimationFrame(animationFrame);
   }, [])
@@ -168,7 +216,7 @@ export default function Main(props) {
   }
 
   return (
-    <div>
+    <div className='trip-container' style={{position:'relative'}}> 
       <DeckGL
         layers={renderLayers({'trip':trip, 'empty':empty, 'ps':ps, 'time':time})}
         effects={DEFAULT_THEME.effects}
@@ -181,11 +229,8 @@ export default function Main(props) {
           preventStyleDiffing={true}
           mapboxApiAccessToken={MAPBOX_TOKEN}
         />
-        <h1 style={{ color: 'red' }}>
-          TIME : {(String(parseInt(Math.round(time) / 60) % 24).length === 2) ? parseInt(Math.round(time) / 60) % 24 : '0'+String(parseInt(Math.round(time) / 60) % 24)} : {(String(Math.round(time) % 60).length === 2) ? Math.round(time) % 60 : '0'+String(Math.round(time) % 60)}
-        </h1>
       </DeckGL>
-      <Slider id="slider" value={time} min={minTime} max={maxTime} onChange={SliderChange} track="inverted" aria-label="Default" valueLabelDisplay="auto" />
+      <Slider id="slider" value={time} min={minTime} max={maxTime} onChange={SliderChange} track="inverted"/>
     </div>
   );
 }
