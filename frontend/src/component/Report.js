@@ -1,8 +1,6 @@
-import {useEffect, useState } from 'react';
 import '../css/report.css'
 
 export default function Report(props){
-    const result = props.result
     const time = props.time
 
     const driveTaxiNum = props.driveTaxiNum
