@@ -14,7 +14,7 @@ def start():
     
 def range_split(blob_client):
     length = blob_client.get_blob_properties().size
-    size_split = np.linspace(0, length, 6, dtype=int).tolist()
+    size_split = np.linspace(0, length, 4, dtype=int).tolist()
     size_split_range = []
         
     for idx, i in enumerate(range(len(size_split[:-1]))):
@@ -53,8 +53,6 @@ async def get_data(type, blob_client):
             get_split_data(1, type, split_range[0][0], split_range[0][1], blob_client),
             get_split_data(2, type, split_range[1][0], split_range[1][1], blob_client),
             get_split_data(3, type, split_range[2][0], split_range[2][1], blob_client),
-            get_split_data(4, type, split_range[3][0], split_range[3][1], blob_client),
-            get_split_data(5, type, split_range[4][0], split_range[4][1], blob_client)
         )
         merge_json(type)
     else:
@@ -66,5 +64,7 @@ def main(type):
     container_client = client.get_container_client(os.environ.get('container_name'))
     blob_name = os.environ.get(type)
     blob_client = container_client.get_blob_client(blob_name)
+    
+    start()
     
     asyncio.run(get_data(type, blob_client))

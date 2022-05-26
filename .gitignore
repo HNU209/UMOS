@@ -3,3 +3,4 @@ backend/.env
 backend/json/
 
 frontend/node_modules/
+frontend/build/
