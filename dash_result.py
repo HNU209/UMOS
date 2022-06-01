@@ -6,7 +6,7 @@ import warnings
 import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
-from my_azure_storage import * 
+from module.my_azure_storage import * 
 
 warnings.filterwarnings("ignore")
 
@@ -402,7 +402,8 @@ page3_2 = go.Figure(data=data, layout=layout, frames=frames)
 
 
 # 3
-hjd_20180401 = gpd.read_file("./data/HangJeongDong_ver20180401.geojson")
+extradata_ct = connect_container("extradata")
+hjd_20180401 = load_json_trans_data("hjd_20180401", extradata_ct, type = "gpd")
 
 ps_wait_inf = []
 for i in trips:
