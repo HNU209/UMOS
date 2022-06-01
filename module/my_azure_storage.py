@@ -2,6 +2,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 import geopandas as gpd
 import pandas as pd
 import json
+import pickle
 
 #rawdata container 연결
 def connect_container(container): 
@@ -53,3 +54,15 @@ def delete_blob(container, blob_nm):
 def blob_list(container):
     container = connect_container(container)
     return [i.name for i in container.list_blobs()]
+
+
+def get_weights_blob(blob_name):
+    connect_str = 'DefaultEndpointsProtocol=https;AccountName=hnustorage;AccountKey=1Zauug2CDS9sTqlgXMlU1ui/6RmuLtdWeN+ubUvewHODgLRq4MAToFxwdC7Vkka5i6XHjXeuVii7+ASt3qSWYA==;EndpointSuffix=core.windows.net'
+    blob_client = BlobClient.from_connection_string(connect_str, "extradata", blob_name)
+    downloader = blob_client.download_blob(0)
+
+    # Load to pickle
+    b = downloader.readall()
+    weights = pickle.loads(b)
+
+    return weights

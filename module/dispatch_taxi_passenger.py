@@ -29,12 +29,12 @@ def dispatch_success_and_fail(call_data, taxi_data):
     return success, [remain_ps, remain_taxi]
 
 ### routes, timestamps, distance, wait_time, drive_time 재정의 및 추가 
-def dispatch_data_col_update(call_data, taxi_data, date):
+def dispatch_data_col_update(call_data, taxi_data, date, model):
     success, remain = dispatch_success_and_fail(call_data, taxi_data)
     remain_ps, remain_taxi = remain[0], remain[1]
 
     #승객에게 가는 route, timestamp, distance 추가
-    success = get_route_time_dispatch(success, date)
+    success = get_route_time_dispatch(success, date, model)
     
     #승객 wait_time, drive_time 추가 
     success["wait_time"] = list(map(lambda data: data[1]['to_ps_timestamp'][-1], success.iterrows()))
@@ -72,7 +72,7 @@ def generate_trips_data_and_driving(taxi_data):
     return taxi_data, to_ps_taxi
 
 ### 기본 매칭 알고리즘 휠체어 사용자 우선 매칭
-def basic_match_dispatch(call_data, taxi_data, date):
+def basic_match_dispatch(call_data, taxi_data, date, model):
     
     taxi_statistics_inf = pd.DataFrame()
     ps_locations_inf = pd.DataFrame()
@@ -87,7 +87,7 @@ def basic_match_dispatch(call_data, taxi_data, date):
 
     ##################################################################################
     ##휠체어 배차
-    success_1, remain_1, ps_loc_inf = dispatch_data_col_update(passenger_call_1, taxi_locations_1,date)
+    success_1, remain_1, ps_loc_inf = dispatch_data_col_update(passenger_call_1, taxi_locations_1, date, model)
     ps_locations_inf = pd.concat([ps_locations_inf,ps_loc_inf])
     taxi_statistics_inf = pd.concat([taxi_statistics_inf,success_1[["no","dispatch_time","wait_time", "drive_time", "ps_distance", "to_ps_distance"]]])
 
@@ -99,7 +99,7 @@ def basic_match_dispatch(call_data, taxi_data, date):
     if len(remain_1[1]) == 0:
         #비휄체어 고객 배차
         taxi_remain = pd.concat([remain_1[0], taxi_locations_0])
-        success_2, remain_2, ps_loc_inf = dispatch_data_col_update(passenger_call_0, taxi_remain, date)
+        success_2, remain_2, ps_loc_inf = dispatch_data_col_update(passenger_call_0, taxi_remain, date, model)
         ps_locations_inf = pd.concat([ps_locations_inf,ps_loc_inf])
         taxi_statistics_inf = pd.concat([taxi_statistics_inf,success_2[["no","dispatch_time","wait_time", "drive_time", "ps_distance", "to_ps_distance"]]])
         
@@ -115,7 +115,7 @@ def basic_match_dispatch(call_data, taxi_data, date):
     #차가 없으면 이번 time pass
     elif len(remain_1[1]) > 0: 
         taxi_remain = pd.concat([remain_1[0], taxi_locations_0])
-        success_2, remain_2, ps_loc_inf = dispatch_data_col_update(passenger_call_0, taxi_remain, date)
+        success_2, remain_2, ps_loc_inf = dispatch_data_col_update(passenger_call_0, taxi_remain, date, model)
         ps_locations_inf = pd.concat([ps_locations_inf,ps_loc_inf])
         taxi_statistics_inf = pd.concat([taxi_statistics_inf,success_2[["no","dispatch_time","wait_time", "drive_time", "ps_distance", "to_ps_distance"]]])
         ###비휠체어 고객 배차 후 데이터 반환
@@ -127,15 +127,15 @@ def basic_match_dispatch(call_data, taxi_data, date):
     driving = pd.concat([driving_1, driving_2])
     return trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf
 
-def match_taxi_ps(call_data, taxi_data, date):
+def match_taxi_ps(call_data, taxi_data, date, model):
     priority_call_data = call_data.loc[call_data["call_time"] != max(call_data["call_time"])].sort_values(by=["call_time"])
     now_call_data = call_data.loc[call_data["call_time"] == max(call_data["call_time"])]
     if len(priority_call_data) != 0:
         if len(priority_call_data) <= len(taxi_data):
-            trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(priority_call_data, taxi_data, date)
+            trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(priority_call_data, taxi_data, date, model)
             passenger_remain = pd.concat([passenger_remain, now_call_data])
             if len(taxi_remain) > 0:
-                trip1, driving1, passenger_remain, taxi_remain, taxi_statistics_inf1, ps_locations_inf1 = basic_match_dispatch(passenger_remain, taxi_remain, date)
+                trip1, driving1, passenger_remain, taxi_remain, taxi_statistics_inf1, ps_locations_inf1 = basic_match_dispatch(passenger_remain, taxi_remain, date, model)
                 
                 trip = trip + trip1
                 driving = pd.concat([driving, driving1])
@@ -147,10 +147,10 @@ def match_taxi_ps(call_data, taxi_data, date):
             sub_priority_call_data = priority_call_data.head(len(taxi_data))
             remain_priority_call_data = priority_call_data.tail(len(priority_call_data) -len(taxi_data))
             
-            trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(sub_priority_call_data, taxi_data, date)
+            trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(sub_priority_call_data, taxi_data, date, model)
             passenger_remain = pd.concat([now_call_data, remain_priority_call_data, passenger_remain])
     else: 
-        trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(call_data, taxi_data, date)
+        trip, driving, passenger_remain, taxi_remain, taxi_statistics_inf, ps_locations_inf = basic_match_dispatch(call_data, taxi_data, date, model)
     
     # 콜 실패 고객 콜 수락 대기 시간 더해주기
     if len(passenger_remain) > 0:

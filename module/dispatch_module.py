@@ -23,7 +23,8 @@ from module.dispatch_data_prepare import dispatch_data_preprocessing
 from module.dispatch_taxi_passenger import *
 
 
-def generate_ps_and_taxi(date, fake_num = 0):
+
+def generate_ps_and_taxi(date, model, fake_ratio=None):
     #passenger api 데이터 받기
     passenger = dispatch_data_loader(date)
     #승객 자세한 위치 정보 부여
@@ -31,12 +32,12 @@ def generate_ps_and_taxi(date, fake_num = 0):
     #택시 생성
     taxi = Generate_taxi_random_location("서울 대한민국", len(set(passenger["no"])))
     #dispatch를 하기위해 데이터 전처리
-    passenger, taxi = dispatch_data_preprocessing(passenger, taxi, date)
+    passenger, taxi = dispatch_data_preprocessing(passenger, taxi, date, model)
     #fake data 생성
-    if fake_num == 0:
+    if fake_ratio == None:
         pass
     else:
-        passenger = generate_fake_passenger(passenger, fake_num)
+        passenger = generate_fake_passenger(passenger, fake_ratio)
     return passenger, taxi
 
 ### Layer information save
@@ -74,7 +75,7 @@ def text_information_save(ps_loc_inf, empty_tx, drive_tx, fail_ps, success_ps_nu
     blob_uploader(json.dumps(dispatch_inf), "data", "dispatch_inf")
 
 
-def dispatch_module(passenger_locations, taxi_locations, fail_time, date):
+def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model):
     empty_taxi = pd.DataFrame()
     driving_data = pd.DataFrame()
     taxi_statistics_information = pd.DataFrame()
@@ -134,7 +135,7 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date):
         if (len(call_ps) + len(ps_remain) > 0) & (len(empty_taxi) > 0):
             # - ps_remain(콜 대기 고객)이 있을 때 실행
             if len(ps_remain) > 0:            
-                trip, driving, ps_remain, tx_remain, taxi_statistics_inf, ps_locations_inf = match_taxi_ps(ps_remain, empty_taxi, date)
+                trip, driving, ps_remain, tx_remain, taxi_statistics_inf, ps_locations_inf = match_taxi_ps(ps_remain, empty_taxi, date, model)
                 taxi_statistics_inf["time"] = i
                 taxi_statistics_information = pd.concat([taxi_statistics_information,taxi_statistics_inf])
                 empty_taxi = tx_remain
@@ -146,7 +147,7 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date):
                     ps_remain = pd.concat([ps_remain, call_ps])
             # - ps_remain(콜 대기 고객)이 없고, call_ps(콜 대기 고객)이 있을때 실행
             if (len(ps_remain) == 0) & (len(call_ps) > 0) & (len(empty_taxi) > 0):
-                trip, driving, ps_remain, tx_remain, taxi_statistics_inf, ps_locations_inf = match_taxi_ps(call_ps, empty_taxi, date)
+                trip, driving, ps_remain, tx_remain, taxi_statistics_inf, ps_locations_inf = match_taxi_ps(call_ps, empty_taxi, date, model)
                 empty_taxi = tx_remain
                 driving_data = pd.concat([driving_data, driving])
                 taxi_statistics_inf["time"] = i
@@ -188,12 +189,14 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date):
     layer_information_save(trips, empty_inf, ps_loc_inf)
     ### Text information save
     text_information_save(ps_loc_inf, empty_tx, drive_tx, fail_ps, success_ps_num)
-    return all_fail_data, ps_final_inf, empty_tx, drive_tx, taxi_final_inf, trips
+    return all_fail_data, ps_final_inf, taxi_final_inf
 
 
 def dispatch_module_main(date, fake_ratio, fail_time):
-    passenger_locations, taxi_locations = generate_ps_and_taxi(date, fake_ratio)
-    all_fail_data, ps_final_inf, empty_tx, drive_tx, taxi_final_inf, trips = dispatch_module(passenger_locations, taxi_locations, fail_time , date)
+    ETA_model = get_weights_blob(blob_name = 'ETA_model.pkl')
+    
+    passenger_locations, taxi_locations = generate_ps_and_taxi(date, ETA_model)
+    all_fail_data, ps_final_inf, taxi_final_inf = dispatch_module(passenger_locations, taxi_locations, fail_time , date, ETA_model)
     graph_blob_list = blob_list("graph-data")
     if len(graph_blob_list) != 0:
         for i in graph_blob_list:

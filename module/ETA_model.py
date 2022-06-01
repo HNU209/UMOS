@@ -3,10 +3,6 @@ import numpy as np
 from module.my_azure_storage import *
 #from holiday_api import holiday_api_year
 from module.osrm_api import *
-import pickle
-
-#holiday_date = holiday_api_year("2022")
-ETA_model = pickle.load(open("ETA_model.pkl", 'rb'))
 
 def haversine(lat1, lon1, lat2, lon2):
     km_constant = 3959* 1.609344
@@ -18,8 +14,7 @@ def haversine(lat1, lon1, lat2, lon2):
     km = km_constant * c
     return km
 
-
-def ETA_data_prepared(self, date, ETA_model=ETA_model):
+def ETA_data_prepared(self, date, model):
     try:
         self = self[["time",'start_point','end_point',"adm_cn_start","adm_cn_end"]]
     except:
@@ -46,5 +41,5 @@ def ETA_data_prepared(self, date, ETA_model=ETA_model):
     self["end_adm"] = self["end_adm"].astype(str)
     self["weekday"] = self["weekday"].astype(str)
     self["holiday"] = self["holiday"].astype(str)
-    ETA_result = ETA_model.predict(self)
+    ETA_result = model.predict(self)
     return ETA_result

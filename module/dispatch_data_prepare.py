@@ -3,6 +3,7 @@ import numpy as np
 import warnings 
 import matplotlib.pyplot as plt
 from module.osrm_api import * 
+from module.my_azure_storage import *
 
 warnings.filterwarnings("ignore")
 
@@ -153,13 +154,13 @@ def redefine_col_name(ps_loc_data, taxi_loc_data):
 
 
 ### *전처리 메인 함수
-def dispatch_data_preprocessing(ps_loc_data, taxi_loc_data, date): 
+def dispatch_data_preprocessing(ps_loc_data, taxi_loc_data, date, model): 
     # 승객 전처리
     ps_loc_data = cartype_transform(ps_loc_data)
     ps_loc_data = change_taxi_id(ps_loc_data)
     ps_loc_data = add_passenger_type(ps_loc_data)
     ps_loc_data = time_transform(ps_loc_data)
-    ps_loc_data = get_route_time_dataframe(ps_loc_data, date)
+    ps_loc_data = get_route_time_dataframe(ps_loc_data, date, model)
 
     # 택시 전처리
     taxi_inf = generate_taxi_inf(ps_loc_data)

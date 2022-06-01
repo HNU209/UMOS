@@ -13,7 +13,6 @@ import pickle
 warnings.filterwarnings("ignore")
 
 #holiday_date = holiday_api_year("2022")
-ETA_model = pickle.load(open("ETA_model.pkl", 'rb'))
 
 ###승객 route 추가 (osrm 이용) 
 def get_res(pickup_point, dropoff_point):
@@ -67,7 +66,7 @@ def get_distance(all_step):
     total_distance = sum(total_distance)
     return total_distance
 
-def get_route_time_dataframe(data_frame, date, model=ETA_model):
+def get_route_time_dataframe(data_frame, date, model):
     total_all_steps = list(map(lambda data: get_res(data[1]["start_point"], data[1]["end_point"]), data_frame.iterrows())) 
     total_all_route = list(map(lambda data: get_total_route(data), total_all_steps))
     total_all_time = list(map(lambda data: get_total_time(data), total_all_steps))
@@ -82,7 +81,7 @@ def get_route_time_dataframe(data_frame, date, model=ETA_model):
     
     return data_frame 
 
-def get_route_time_dispatch(data_frame, date, model=ETA_model):
+def get_route_time_dispatch(data_frame, date, model):
     total_all_steps = list(map(lambda data: get_res(data[1]["tx_loc"], data[1]["ps_loc_0"]), data_frame.iterrows())) 
     total_all_route = list(map(lambda data: get_total_route(data), total_all_steps))
     total_all_time = list(map(lambda data: get_total_time(data), total_all_steps))
