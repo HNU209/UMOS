@@ -3,3 +3,7 @@ backend/.env
 backend/json/
 
 frontend/node_modules/
+frontend/build/
+
+__pycache__/
+cache/
