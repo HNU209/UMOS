@@ -1,0 +1,47 @@
+name: visualization
+
+on:
+  push:
+    paths:
+      - visualization/app.py
+    branches: [ tb_eom ]
+
+jobs:
+  visualization:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: visualization/
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: docker login
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ${{ secrets.azure_registry_login_server }}
+          username: ${{ secrets.azure_registry_username }}
+          password: ${{ secrets.azure_registry_password }}
+      -
+        name: create env file
+        run: |
+          echo "connect_str=${{ secrets.azure_storage_connect_str }}" >> .env
+          echo "container_name=${{ secrets.azure_storage_container_name }}" >> .env
+          echo "trip=${{ secrets.trip }}" >> .env
+          echo "empty=${{ secrets.empty }}" >> .env
+          echo "ps=${{ secrets.ps }}" >> .env
+          echo "result=${{ secrets.result }}" >> .env
+          cat .env
+      -
+        name: docker build and push
+        run: docker build -t visualization .
+      -
+        name: docker tag rename
+        run: docker tag visualization ${{ secrets.azure_registry_login_server }}/visualization
+        
+      - name: docker push
+        run: docker push ${{ secrets.azure_registry_login_server }}/visualization
