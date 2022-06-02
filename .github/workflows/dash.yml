@@ -16,8 +16,8 @@ jobs:
       -
         name: file copy
         run: |
-          cp ./requirements.txt ./dashboard/requirements.txt
-          cp ./module/my_azure_storage.py ./dashboard/my_azure_storage.py
+          cp requirements.txt dashboard/requirements.txt
+          cp module/my_azure_storage.py dashboard/my_azure_storage.py
 
   dash:
     runs-on: ubuntu-latest
