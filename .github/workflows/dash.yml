@@ -7,6 +7,18 @@ on:
     branches: [ main ]
 
 jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: file copy
+        run: |
+          cp ./requirements.txt ./dashboard/requirements.txt
+          cp ./module/my_azure_storage.py ./dashboard/my_azure_storage.py
+
   dash:
     runs-on: ubuntu-latest
     defaults:
