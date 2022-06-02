@@ -10,6 +10,7 @@ templates_folder = os.path.join(folder_loc, 'build')
 
 app = Flask(__name__, static_folder=templates_folder, static_url_path='/')
 CORS(app)
+
 main()
 
 @app.route('/')
