@@ -2,7 +2,7 @@ FROM python:3.8-slim-buster
 
 COPY module/my_azure_storage.py /app/my_azure_storage.py
 COPY requirements.txt /app/requirements.txt
-COPY app.py /app/dash_result.py
+COPY app.py /app/app.py
 
 WORKDIR /app
 
