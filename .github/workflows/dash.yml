@@ -9,9 +9,6 @@ on:
 jobs:
   dash:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: dashboard/
     steps:
       -
         name: Checkout
@@ -29,9 +26,15 @@ jobs:
       -
         name: docker build and push
         run: docker build -t dash .
+        env:
+          working-directory: ./dashboard
       -
         name: docker tag rename
         run: docker tag dash ${{ secrets.azure_registry_login_server }}/dash
+        env:
+          working-directory: ./dashboard
         
       - name: docker push
         run: docker push ${{ secrets.azure_registry_login_server }}/dash
+        env:
+          working-directory: ./dashboard
