@@ -10,4 +10,4 @@ RUN pip3 install -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python3", "dash_result.py"]
+CMD ["python3", "app.py"]
