@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
 from my_azure_storage import *
+
 warnings.filterwarnings("ignore")
 
 # Data Load
