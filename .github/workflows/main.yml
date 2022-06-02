@@ -24,8 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       -
-        name: Kubectl tool installer
+        name: kubectl tool installer
         uses: Azure/setup-kubectl@v2.1
+      -
+        name: kubernetes get credentials
+        run: |
+          az aks get-credentials --resource-group HNU --name hnukuber
       -
         name: kubernete image update
         run: |
