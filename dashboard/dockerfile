@@ -1,8 +1,6 @@
 FROM ubuntu:20.04
 
-COPY ../module/my_azure_storage.py /app
 COPY . /app
-COPY ./requirements.txt /app
 
 WORKDIR /app
 
