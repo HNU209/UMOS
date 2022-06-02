@@ -1,0 +1,24 @@
+name: main
+
+on:
+  push:
+    paths:
+      - main.py
+    branches: [ main ]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      -
+        name: run main file
+        run: |
+          python main.py
