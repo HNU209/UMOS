@@ -9,7 +9,6 @@ from shapely.geometry import Point
 from module.my_azure_storage import * 
 
 warnings.filterwarnings("ignore")
-
 # Data Load
 graph_ct = connect_container("graph-data")
 
