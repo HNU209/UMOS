@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import warnings 
-import matplotlib.pyplot as plt
 from module.osrm_api import * 
 from module.my_azure_storage import *
 
@@ -63,11 +62,13 @@ def time_transform(ps_loc_data):
     receipt_time = receipttime_time.dt.minute + receipttime_time.dt.hour*60
     receipt_time = receipt_time.tolist()
     
-    passenger_df['time'] = [t+1440 if d == 17 else t for t,d in zip(receipt_time, receipttime_date)]
-    passenger_df['set_time'] = [t+1440 if d == 17 else t for t,d in zip(set_time, settime_date)]
+    days = passenger_df["receipttime_date"][0].day    
+    passenger_df['time'] = [t+1440 if d != days else t for t,d in zip(receipt_time, receipttime_date)]
+    passenger_df['set_time'] = [t+1440 if d != days else t for t,d in zip(set_time, settime_date)]
     
     passenger_df.drop(['settime_date','settime_time','receipttime_date','receipttime_time'], axis=1, inplace=True)
     passenger_df.reset_index(drop=True, inplace=True)
+    passenger_df = passenger_df.loc[passenger_df["set_time"] >= 360]
     return passenger_df
 
 
@@ -106,33 +107,6 @@ def operation_inf(taxi_information):
     taxi_information = taxi_information[["no", "cartype", "start_time", "end_time"]]
     return taxi_information
 
-# def estimate_taxi_schedule_plot(taxi_inf):
-#     bins = [i*60 for i in range(6,31)]
-#     labels = [f"{i}" for i in range(6,30)]
-
-#     start = pd.DataFrame(pd.cut(taxi_inf["start_time"], bins, labels = labels).value_counts(sort=False))
-#     end = pd.DataFrame(pd.cut(taxi_inf["end_time"], bins, labels = labels).value_counts(sort=False))
-
-#     f, axes = plt.subplots(1, 2)
-#     f.set_size_inches((22, 12))
-#     plt.rc('font', size=20)        # 기본 폰트 크기
-#     plt.rc('axes', labelsize=20)   # x,y축 label 폰트 크기
-
-#     axes[0].barh(start.index ,start["start_time"])
-#     axes[0].set_yticklabels(labels, fontsize=20)
-#     axes[0].set_xlim(0, 200)
-#     axes[0].set_xlabel("차량 대수")
-#     axes[0].set_ylabel("시간")
-#     axes[0].set_title("추정 운행 시작 시간 분포")
-
-#     axes[1].barh(end.index ,end["end_time"], color = "red")
-#     axes[1].set_yticklabels(labels, fontsize=20)
-#     axes[1].set_xlim(0, 200)
-#     axes[1].set_xlabel("차량 대수")
-#     axes[1].set_ylabel("시간")
-#     axes[1].set_title("추정 운행 종료 시간 분포")
-#     plt.savefig("./result_data/추정운행정보.png")
-
 
 ### 8. 승객 데이터, 택시 데이터 컬럼명 재정의 및 필요 컬럼 추가: 추후 혼동 방지
 def redefine_col_name(ps_loc_data, taxi_loc_data): 
@@ -166,6 +140,7 @@ def dispatch_data_preprocessing(ps_loc_data, taxi_loc_data, date, model):
     taxi_inf = generate_taxi_inf(ps_loc_data)
     taxi_schedule = operation_inf(taxi_inf)
     # estimate_taxi_schedule_plot(taxi_schedule) #데이터 기반 택시 운행 추정
+    print(len(taxi_schedule), len(taxi_inf), len(taxi_loc_data))
     taxi_loc_data["no"] = list(taxi_schedule.no)
     taxi_loc_data = taxi_loc_data.drop(["Taxi_ID"], axis=1)
     taxi_loc_data = pd.merge(taxi_schedule,taxi_loc_data)

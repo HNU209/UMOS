@@ -149,8 +149,8 @@ def dispatch_data_loader(date):
     #요청 날짜 다음날 00~06시
     date_2 = date_2.loc[mask_2]
     
-    date = pd.concat([date_1, date_2])
-    return date
+    data = pd.concat([date_1, date_2])
+    return data
 
 def basic_loader(date):
     # Storage를 통해 데이터 load
