@@ -23,21 +23,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
       -
-        name: kubernete dash image update
-        uses: myrotvorets/kubectl-action@2.0.0
-        with:
-          config: ${{ secrets.KUBE_CONFIG_DATA }}
-          version: latest
-          args: set image deployment dash dash=hnucontainer.azurecr.io/dash:latest
+        name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v2.1
       -
-        name: kubernete dash image update
-        uses: myrotvorets/kubectl-action@2.0.0
-        with:
-          config: ${{ secrets.KUBE_CONFIG_DATA }}
-          version: latest
-          args: set image deployment visualization visualization=hnucontainer.azurecr.io/visualization:latest
+        name: kubernete image update
+        run: |
+          kubectl set image deployment dash dash=hnucontainer.azurecr.io/dash:latest
+          kubectl set image deployment visualization visualization=hnucontainer.azurecr.io/visualization:latest
 #       -
 #         name: run main file
 #         run: |
