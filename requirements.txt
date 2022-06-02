@@ -45,4 +45,4 @@ requests-unixsocket==0.2.0
 scipy==1.8.0
 tqdm==4.62.3
 jsonpickle==2.2.0
-
+sympy==1.10.1
