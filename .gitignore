@@ -1,9 +1,6 @@
-backend/__pycache__/
-backend/.env
-backend/json/
-
-frontend/node_modules/
-frontend/build/
+visualization/__pycache__/
+visualization/.env
+visualization/json/
 
 __pycache__/
 cache/
