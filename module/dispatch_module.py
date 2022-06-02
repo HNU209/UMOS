@@ -118,16 +118,13 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
             
             ps_remain = ps_remain.loc[ps_remain["dispatch_time"] < fail_time]
 
-        ### plot information
+        ### 기본 information
         waiting_ps.extend([len(call_ps) + len(ps_remain)])
         empty_tx.extend([len(empty_taxi)])
         drive_tx.extend([len(driving_data)])
         fail_ps.extend([len(all_fail_data)])
         success_ps_num.extend([len(trips)/2])
         t.extend([i])
-        ### live plot
-        # clear_output(True)
-        # dispatch_result_plot(t, waiting_ps, empty_tx, drive_tx)
         
         ### Dispatch
         # - call_ps : 현시 콜 고객, ps_remain : 콜 대기 고객
@@ -166,9 +163,6 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
             #목적지까지 운행완료한 택시 빈 택시에 추가
             empty_taxi = pd.concat([empty_taxi ,drive_end])
             
-    # ### Save result plot
-    # dispatch_result_plot(t, waiting_ps, empty_tx, drive_tx, mode="last")
-
     ### Passenger_information, Taxi_information
     # - passenger_information
     ps_loc_inf = pd.concat(passenger_loc_information)
