@@ -3,7 +3,7 @@ name: dash
 on:
   push:
     paths:
-      - dash_result.py
+      - ./dash_result.py
     branches: [ main ]
 
 jobs:
