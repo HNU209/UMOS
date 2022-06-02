@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from sympy import false
 from utility import main
 from flask_cors import CORS
 import json
@@ -24,4 +25,4 @@ def get_json(type):
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
