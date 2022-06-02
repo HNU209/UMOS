@@ -1,5 +1,6 @@
 ###Load packages 
 import pandas as pd
+from sympy import false
 import geopandas as gpd
 import numpy as np
 import warnings 
@@ -7,6 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
 from my_azure_storage import *
+from flask import Flask
+from flask_cors import CORS
 
 warnings.filterwarnings("ignore")
 
@@ -438,7 +441,10 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objects as go
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP],
+server = Flask(__name__)
+CORS(server)
+
+app = dash.Dash(server=server, external_stylesheets=[dbc.themes.BOOTSTRAP],
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -566,4 +572,4 @@ def render_page_content(pathname):
     )
 
 if __name__ == "__main__":
-    app.run_server(host='0.0.0.0', port=5000)
+    app.run_server(host='0.0.0.0', port=8000, debug=False)
