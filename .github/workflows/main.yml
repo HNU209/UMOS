@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       -
+        name: run main file
+        run: |
+          python main.py
+      -
         name: kubectl tool installer
         uses: Azure/setup-kubectl@v2.1
       -
@@ -38,9 +42,5 @@ jobs:
       -
         name: kubernete image update
         run: |
-          kubectl set image deployment dash dash=hnucontainer.azurecr.io/dash:latest
-          kubectl set image deployment visualization visualization=hnucontainer.azurecr.io/visualization:latest
-      -
-        name: run main file
-        run: |
-          python main.py
+          kubectl rollout restart deployment dash
+          kubectl rollout restart deployment visualization
