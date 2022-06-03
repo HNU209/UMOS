@@ -32,3 +32,19 @@ jobs:
       - 
         name: docker push
         run: docker push ${{ secrets.azure_registry_login_server }}/dash
+      -
+        name: kubectl tool installer
+        uses: Azure/setup-kubectl@v2.1
+      -
+        name: azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      -
+        name: kubernetes get credentials
+        run: |
+          az aks get-credentials --resource-group HNU --name hnukuber
+      -
+        name: kubernete image update
+        run: |
+          kubectl rollout restart deployment dash
