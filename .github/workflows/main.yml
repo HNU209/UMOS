@@ -40,8 +40,7 @@ jobs:
         run: |
           kubectl set image deployment dash dash=hnucontainer.azurecr.io/dash:latest
           kubectl set image deployment visualization visualization=hnucontainer.azurecr.io/visualization:latest
-#       -
-#         name: run main file
-#         run: |
-#           python main.py
-
+      -
+        name: run main file
+        run: |
+          python main.py
