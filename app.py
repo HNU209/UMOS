@@ -405,17 +405,12 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objects as go
-import os
 
 server = Flask(__name__)
 CORS(server)
 
-folder_loc = os.path.dirname(os.path.abspath(__file__))
-static_folder = os.path.join(folder_loc, 'static')
-
-app = dash.Dash(__name__, server=server, static_folder=static_folder,
+app = dash.Dash(__name__, server=server, 
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
-
 
 def build_banner():
     return html.Div(
@@ -543,10 +538,8 @@ build_tab_3 = [
 
 
 app.layout = html.Div([
-    html.Link(
-        rel='stylesheet',
-        href='/static/base-styles.css'
-    ),
+    html.Link(rel="stylesheet",
+              href="static/base-styles.css"),
     html.Div(
     id="big-app-container",
     children=[
