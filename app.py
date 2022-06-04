@@ -413,6 +413,7 @@ app = dash.Dash(__name__, server=server,
 
 app.title = "RESULT REPORT"
 
+
 def build_banner():
     return html.Div(
         id="banner",
@@ -424,8 +425,8 @@ def build_banner():
                     html.H4("RESULT REPORT"),
                 ],
             )
-        ],
-    )
+        ])
+
 
 def build_tabs():
     return html.Div(
@@ -537,9 +538,8 @@ build_tab_3 = [
                  dcc.Graph(figure=page3_3)])
     ]
 
+
 app.layout = html.Div([
-    html.Link(rel= 'base-styles', hrel="./base-styles.css"),
-    html.Link(rel= 'spc-custom-styles', hrel="./spc-custom-styles.css"),
     html.Div(
     id="big-app-container",
     children=[
