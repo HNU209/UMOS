@@ -542,7 +542,7 @@ build_tab_3 = [
 app.layout = html.Div([
     html.Link(
         rel='stylesheet',
-        href='https://raw.githubusercontent.com/HNU209/UMOS/main/static/base-styles.css?token=GHSAT0AAAAAABUHV3RLAKTPXK74PPD7JG7QYU3SCXQ'
+        href='/app/static/base-styles.css'
     ),
     html.Div(
     id="big-app-container",
