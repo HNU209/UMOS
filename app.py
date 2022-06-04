@@ -411,12 +411,10 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
-
 app = dash.Dash(__name__, server=server,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
-app.css.config.serve_locally = True
-app.scripts.config.serve_locally = True
+app.css.append_css({"external_url": "./static/base-styles.css" })
 
 def build_banner():
     return html.Div(
@@ -562,12 +560,6 @@ app.layout = html.Div([
         ),
     ],
 )])
-
-
-@app.server.route('/static/<path>')
-def static_file(path):
-    static_folder = os.path.join(os.getcwd(), 'static')
-    return send_from_directory(static_folder, path)
 
 @app.callback(
     [Output("app-content", "children")],

@@ -5,7 +5,6 @@ COPY requirements.txt app/
 COPY app.py app/
 COPY static app/
 
-
 WORKDIR /app
 
 RUN pip3 install -r requirements.txt
