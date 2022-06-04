@@ -182,6 +182,7 @@ page2_1.update_layout(
 )
 
 
+
 # 2 
 taxi_final_inf = taxi_final_inf.fillna(0)
 taxi_final_inf["total_drive_time"] = taxi_final_inf["total_to_ps_drive_time"] + taxi_final_inf["total_ps_drive_time"]
