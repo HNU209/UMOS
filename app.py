@@ -10,6 +10,8 @@ from shapely.geometry import Point
 from my_azure_storage import *
 from flask import Flask
 from flask_cors import CORS
+from flask import send_from_directory
+import os
 
 warnings.filterwarnings("ignore")
 
@@ -412,9 +414,8 @@ CORS(server)
 app = dash.Dash(__name__, server=server,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
-app.title = "RESULT REPORT"
-
-app.css.append_css({"external_url": "app/assets/base-styles.css"})
+app.css.config.serve_locally = True
+app.scripts.config.serve_locally = True
 
 def build_banner():
     return html.Div(
@@ -542,6 +543,10 @@ build_tab_3 = [
 
 
 app.layout = html.Div([
+    html.Link(
+        rel='stylesheet',
+        href='/static/base-styles.css'
+    ),
     html.Div(
     id="big-app-container",
     children=[
@@ -557,6 +562,11 @@ app.layout = html.Div([
     ],
 )])
 
+
+@app.server.route('/static/<path:path>')
+def static_file(path):
+    static_folder = os.path.join(os.getcwd(), 'static')
+    return send_from_directory(static_folder, path)
 
 @app.callback(
     [Output("app-content", "children")],
