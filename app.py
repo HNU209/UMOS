@@ -405,12 +405,13 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objects as go
 
-app = dash.Dash(
-    __name__,
-    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
-)
+server = Flask(__name__)
+CORS(server)
+
+app = dash.Dash(__name__, server=server,
+                meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
+
 app.title = "RESULT REPORT"
-server = app.server
 
 def build_banner():
     return html.Div(
