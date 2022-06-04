@@ -7,7 +7,7 @@ import warnings
 import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
-from module.my_azure_storage import *
+from my_azure_storage import *
 from flask import Flask
 from flask_cors import CORS
 
