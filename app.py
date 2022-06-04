@@ -414,7 +414,7 @@ app = dash.Dash(__name__, server=server,
 
 app.title = "RESULT REPORT"
 
-app.css.append_css({"external_url": "./assets/base-styles.css"})
+app.css.append_css({"external_url": "app/assets/base-styles.css"})
 
 def build_banner():
     return html.Div(
