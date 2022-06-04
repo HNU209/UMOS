@@ -408,6 +408,11 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
+# external_stylesheets=["./assets/stylesheet.css",
+#                       ]
+# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+
 app = dash.Dash(__name__, server=server,
                 assets_external_path='./assets',
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
