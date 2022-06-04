@@ -95,6 +95,17 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
     ###
     ps_remain = []
     for i in range(360, 1801):
+        ### Driving taxi, Empty taxi 전환 
+        # - driving_data(운행 중인 차량)에서 고객이 내린 차량은 빈 택시로 전환
+        if len(driving_data) > 0:
+            #목적지까지 운행완료한 택시
+            drive_end = driving_data.loc[driving_data["end_time"] <= i]
+            drive_end = drive_end[["no","cartype","work_start","work_end","board_status","tx_loc"]]
+            #운행 중인 택시
+            driving_data = driving_data.loc[driving_data["end_time"] > i]
+            #목적지까지 운행완료한 택시 빈 택시에 추가
+            empty_taxi = pd.concat([empty_taxi ,drive_end])
+        
         ### Passenger, Taxi 추가 및 제거
         # - 운행 종료 택시 제거 및 360(운행시작시간)에서는 미실행
         if (i % 60 == 0) and (i != 360):
@@ -107,9 +118,8 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
             empty_taxi = pd.concat([start_taxi, empty_taxi])
         # - 매 분 콜호출 고객 데이터 업데이트
         call_ps = passenger_locations.loc[passenger_locations.call_time == i]
-        # - 빈 차량 정보 누적 업데이트(시각화를 위한 데이터) 
-        empty_inf.append([i,empty_taxi])
-        # - 콜 대기시간 60분 이상이면 콜실패로 콜 고객 데이터에서 제거
+        
+        # - 콜 대기시간 30분 이상이면 콜실패로 콜 고객 데이터에서 제거
         # - 실패 데이터 시각화를 위한 누적 업데이트
         if len(ps_remain) > 0:
             fail_data = ps_remain.loc[ps_remain["dispatch_time"] >= fail_time]
@@ -117,14 +127,7 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
             all_fail_data = pd.concat([all_fail_data, fail_data])
             
             ps_remain = ps_remain.loc[ps_remain["dispatch_time"] < fail_time]
-
-        ### 기본 information
-        waiting_ps.extend([len(call_ps) + len(ps_remain)])
-        empty_tx.extend([len(empty_taxi)])
-        drive_tx.extend([len(driving_data)])
-        fail_ps.extend([len(all_fail_data)])
-        success_ps_num.extend([len(trips)/2])
-        t.extend([i])
+    
         
         ### Dispatch
         # - call_ps : 현시 콜 고객, ps_remain : 콜 대기 고객
@@ -151,17 +154,17 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
                 taxi_statistics_information = pd.concat([taxi_statistics_information,taxi_statistics_inf])
                 passenger_loc_information.append(ps_locations_inf)
                 trips.extend(trip)
-        
-        ### Driving taxi, Empty taxi 전환 
-        # - driving_data(운행 중인 차량)에서 고객이 내린 차량은 빈 택시로 전환
-        if len(driving_data) > 0:
-            #목적지까지 운행완료한 택시
-            drive_end = driving_data.loc[driving_data["end_time"] <= i]
-            drive_end = drive_end[["no","cartype","work_start","work_end","board_status","tx_loc"]]
-            #운행 중인 택시
-            driving_data = driving_data.loc[driving_data["end_time"] > i]
-            #목적지까지 운행완료한 택시 빈 택시에 추가
-            empty_taxi = pd.concat([empty_taxi ,drive_end])
+
+        ### 기본 information
+        waiting_ps.extend([len(ps_remain)])
+        empty_tx.extend([len(empty_taxi)])
+        drive_tx.extend([len(driving_data)])
+        fail_ps.extend([len(all_fail_data)])
+        success_ps_num.extend([len(trips)/2])
+        t.extend([i])
+        # - 빈 차량 정보 누적 업데이트(시각화를 위한 데이터) 
+        empty_inf.append([i,empty_taxi])
+    
             
     ### Passenger_information, Taxi_information
     # - passenger_information
