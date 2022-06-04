@@ -10,8 +10,6 @@ from shapely.geometry import Point
 from my_azure_storage import *
 from flask import Flask
 from flask_cors import CORS
-from flask import send_from_directory
-import os
 
 warnings.filterwarnings("ignore")
 
@@ -411,10 +409,13 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
-app = dash.Dash(__name__, server=server,
+external_stylesheets = ['https://raw.githubusercontent.com/HNU209/UMOS/main/static/base-styles.css?token=GHSAT0AAAAAABUHV3RLAKTPXK74PPD7JG7QYU3SCXQ']
+
+app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
-app.css.append_css({"external_url": "./static/base-styles.css" })
+app.css.config.serve_locally = True
+app.scripts.config.serve_locally = True
 
 def build_banner():
     return html.Div(
@@ -560,6 +561,7 @@ app.layout = html.Div([
         ),
     ],
 )])
+
 
 @app.callback(
     [Output("app-content", "children")],
