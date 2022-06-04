@@ -537,6 +537,9 @@ build_tab_3 = [
                  dcc.Graph(figure=page3_3)])
     ]
 
+app.head = [html.Link(rel= 'base-styles', hrel="./assets/base-styles.css"),
+            html.Link(rel= 'spc-custom-styles', hrel="./assets/spc-custom-styles.css")]
+
 app.layout = html.Div(
     id="big-app-container",
     children=[
