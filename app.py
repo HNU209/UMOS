@@ -278,6 +278,7 @@ layout = go.Layout(
 page3_1_1 = go.Figure(data=data, layout=layout, frames=frames)
 
 
+
 # 3-1-1-a
 data = go.Densitymapbox(lat=ps_start_inf.lat, lon=ps_start_inf.long,
                                  radius=7)
