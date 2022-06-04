@@ -7,7 +7,7 @@ import warnings
 import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
-from my_azure_storage import *
+from module.my_azure_storage import *
 from flask import Flask
 from flask_cors import CORS
 
@@ -406,16 +406,14 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objects as go
 
-server = Flask(__name__)
-CORS(server)
+# server = Flask(__name__)
+# CORS(server)
 
 external_stylesheets = ['https://raw.githubusercontent.com/HNU209/UMOS/main/static/base-styles.css?token=GHSAT0AAAAAABUHV3RLAKTPXK74PPD7JG7QYU3SCXQ']
 
-app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets,
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, #server=server,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
-app.css.config.serve_locally = True
-app.scripts.config.serve_locally = True
 
 def build_banner():
     return html.Div(
