@@ -405,12 +405,15 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objects as go
+import os
 
 server = Flask(__name__)
 CORS(server)
 
+folder_loc = os.path.dirname(os.path.abspath(__file__))
+static_folder = os.path.join(folder_loc, 'static')
 
-app = dash.Dash(__name__, server=server,
+app = dash.Dash(__name__, server=server, static_folder=static_folder,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 
