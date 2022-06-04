@@ -409,9 +409,8 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
-external_stylesheets = ['https://raw.githubusercontent.com/HNU209/UMOS/main/static/base-styles.css?token=GHSAT0AAAAAABUHV3RLAKTPXK74PPD7JG7QYU3SCXQ']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets,server=server,
+app = dash.Dash(__name__, server=server,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 
@@ -543,7 +542,7 @@ build_tab_3 = [
 app.layout = html.Div([
     html.Link(
         rel='stylesheet',
-        href='/static/base-styles.css'
+        href='https://raw.githubusercontent.com/HNU209/UMOS/main/static/base-styles.css?token=GHSAT0AAAAAABUHV3RLAKTPXK74PPD7JG7QYU3SCXQ'
     ),
     html.Div(
     id="big-app-container",
