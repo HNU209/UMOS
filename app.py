@@ -408,18 +408,17 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
-# external_stylesheets=["./assets/stylesheet.css",
-#                       ]
-# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+external_stylesheets=["./assets/base-styles.css",
+                      "./assets/spc-custom-styles.css"
+                       ]
 
 app = dash.Dash(__name__, server=server,
-                assets_external_path='./assets',
+                external_stylesheets=external_stylesheets,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 app.title = "RESULT REPORT"
 
-
+app.css.config.serve_locally = False
 
 def build_banner():
     return html.Div(
