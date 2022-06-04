@@ -537,10 +537,10 @@ build_tab_3 = [
                  dcc.Graph(figure=page3_3)])
     ]
 
-app.head = [html.Link(rel= 'base-styles', hrel="./base-styles.css"),
-            html.Link(rel= 'spc-custom-styles', hrel="./spc-custom-styles.css")]
-
-app.layout = html.Div(
+app.layout = html.Div([
+    html.Link(rel= 'base-styles', hrel="./base-styles.css"),
+    html.Link(rel= 'spc-custom-styles', hrel="./spc-custom-styles.css"),
+    html.Div(
     id="big-app-container",
     children=[
         build_banner(),
@@ -553,7 +553,7 @@ app.layout = html.Div(
             ],
         ),
     ],
-)
+)])
 
 
 @app.callback(
