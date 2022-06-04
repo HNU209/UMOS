@@ -539,7 +539,7 @@ build_tab_3 = [
 
 app.layout = html.Div([
     html.Link(rel="stylesheet",
-              href="static/base-styles.css"),
+              href="base-styles.css"),
     html.Div(
     id="big-app-container",
     children=[

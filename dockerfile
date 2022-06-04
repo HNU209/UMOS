@@ -3,7 +3,7 @@ FROM python:3.8-slim-buster
 COPY module/my_azure_storage.py app/
 COPY requirements.txt app/
 COPY app.py app/
-COPY static app/
+COPY static/base-styles.css app/
 
 WORKDIR /app
 
