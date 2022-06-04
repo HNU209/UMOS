@@ -564,7 +564,7 @@ app.layout = html.Div([
 )])
 
 
-@app.server.route('/static/<path:path>')
+@app.server.route('/static/<path>')
 def static_file(path):
     static_folder = os.path.join(os.getcwd(), 'static')
     return send_from_directory(static_folder, path)
