@@ -413,6 +413,13 @@ app = dash.Dash(__name__, server=server,
 
 app.title = "RESULT REPORT"
 
+external_css2 = [
+"./assets/base-styles.css",
+"./assets/spc-custom-styles.css",
+]
+
+app.css.append_css({"external_url": external_css2 })
+
 
 def build_banner():
     return html.Div(
