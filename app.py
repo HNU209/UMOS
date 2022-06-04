@@ -409,16 +409,11 @@ server = Flask(__name__)
 CORS(server)
 
 app = dash.Dash(__name__, server=server,
+                assets_external_path='./assets',
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 app.title = "RESULT REPORT"
 
-external_css2 = [
-"./assets/base-styles.css",
-"./assets/spc-custom-styles.css",
-]
-
-app.css.append_css({"external_url": external_css2 })
 
 
 def build_banner():
