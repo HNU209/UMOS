@@ -467,8 +467,7 @@ COLORS = {
 }
 
 
-def build_tab_1():
-    return [
+build_tab_1 = [
         html.Div(
             children=[
                  #page1
@@ -490,8 +489,7 @@ def build_tab_1():
     ]
     
 
-def build_tab_2():
-    return [
+build_tab_2 = [
         html.Div(
             children=[
                  #page2
@@ -509,8 +507,7 @@ def build_tab_2():
     ]
 
 
-def build_tab_3():
-    return [
+build_tab_3 = [
         html.Div(
             children=[
                  #page3
@@ -561,10 +558,10 @@ app.layout = html.Div(
 )
 def render_tab_content(tab_switch):
     if tab_switch == "tab1":
-        return build_tab_1()
+        return build_tab_1
     elif tab_switch == "tab2":
-        return build_tab_2()
-    return build_tab_3()
+        return build_tab_2
+    return build_tab_3
 
 if __name__ == "__main__":
     app.run_server(host='0.0.0.0', port=8000, debug=False)
