@@ -413,7 +413,7 @@ CORS(server)
 
 external_stylesheets = ['https://assets.codepen.io/8349312/custom-styles.css']
 
-app = dash.Dash(__name__, server=server,external_stylesheets=external_stylesheets,
+app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 def build_banner():
@@ -424,7 +424,7 @@ def build_banner():
             html.Div(
                 id="banner-text",
                 children=[
-                    html.H4("RESULT REPORT"),
+                    html.B(html.H1("RESULT REPORT")),
                 ],
             )
         ])
@@ -476,17 +476,19 @@ build_tab_1 = [
             children=[
                  #page1
                  html.Br(),
-                 html.H2(html.B("1. 호출요청 및 호출실패"), style={"color": COLORS["text"]}),
+                 html.H4(html.B("1. 호출요청 및 호출실패"), style={"color": COLORS["text"]}),
+                 html.Br(),
                  #page1-a
                  dbc.Alert([html.Li(html.B(f"전체 호출 수:  총 {len(passenger_locations)}건 | 전체 실패 호출 수:  총 {len(all_fail_data)}건"),
-                                    style={'font-size':'120%',"color": COLORS["text"]})], color="#3c434a"),
+                                    style={'font-size':'130%',"color": COLORS["text"]})], color="#3c434a"),
                  #page1-b
-                 html.Li(html.B("시간대 별 효출요청 및 호출실패 건수"),style={"font-size": '120%', "color": COLORS["text"]}),
+                 html.Li(html.B("시간대 별 효출요청 및 호출실패 건수"),style={"font-size": '130%', "color": COLORS["text"]}),
                  dcc.Graph(figure=page1_1b),
                  html.Hr(style={"color": COLORS["text"]}),
                  #page2
                  html.Br(),
-                 html.H2(html.B("2. 승객 대기시간 분포"), style={"color": COLORS["text"]}),
+                 html.H4(html.B("2. 승객 대기시간 분포"), style={"color": COLORS["text"]}),
+                 html.Br(),
                  dbc.Row([dcc.Graph(figure=page1_2b, style={'width': '70%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
                           dcc.Graph(figure=page1_2a, style={'width': '30%', 'display': 'inline-block', 'padding': '0 0 0 10'})])]
             )
@@ -498,15 +500,15 @@ build_tab_2 = [
             children=[
                  #page2
                  html.Br(),
-                 html.H2(html.B("1. 차량 운행 정보"), style={"color": COLORS["text"]}),
+                 html.H4(html.B("1. 차량 운행 정보"), style={"color": COLORS["text"]}),
                  html.Br(),
                  #page2-a
-                 html.Li(html.B("차량 운행 기록 정보"), style={'font-size': '110%', "color": COLORS["text"]}),
-                 dbc.Alert([html.B(f"총 운행 차량 대수: {len(taxi_final_inf)}대/일 | 총 운행 거리: {round(taxi_final_inf[['total_ps_distance', 'total_ps_distance']].values.sum() / 1000)}km/일, 총 운행 시간: {round(sum(taxi_final_inf['total_drive_time'])/60)}hour/일", 
-                                           style={'font-size':'120%', "color": COLORS["text"]})], color="#3c434a"),
+                 html.Li(html.B("차량 운행 기록 정보"), style={'font-size': '130%', "color": COLORS["text"]}),
+                 dbc.Alert([html.B(f" 총 운행 차량 대수: {len(taxi_final_inf)}대/일 | 총 운행 거리: {round(taxi_final_inf[['total_ps_distance', 'total_ps_distance']].values.sum() / 1000)}km/일, 총 운행 시간: {round(sum(taxi_final_inf['total_drive_time'])/60)}hour/일", 
+                                           style={'font-size':'130%', "color": COLORS["text"]})], color="#3c434a"),
                  #page2-b
                  html.Br(),
-                 html.Li(html.B("시간대 별 전체 차량 운행 현황"), style={'font-size': '110%', "color": COLORS["text"]}),
+                 html.Li(html.B("시간대 별 전체 차량 운행 현황"), style={'font-size': '130%', "color": COLORS["text"]}),
                  dcc.Graph(figure=page2_1)])
     ]
 
@@ -516,20 +518,20 @@ build_tab_3 = [
             children=[
                  #page3
                  html.Br(),
-                 html.H2(html.B("1. 시간대별 승/하차 위치"), style={'color': COLORS["text"]}),
+                 html.H4(html.B("1. 시간대별 승/하차 위치"), style={'color': COLORS["text"]}),
                  html.Br(),
                  #page3-1
-                 html.Li(html.B("승차"), style={'font-size': '110%', "color": COLORS["text"]}),
+                 html.Li(html.B("승차"), style={'font-size': '130%', "color": COLORS["text"]}),
                  dbc.Row([dcc.Graph(figure=page3_1_1, style={'width': '50%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
                           dcc.Graph(figure=page3_1_1_a, style={'width': '50%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),
                  html.Br(),
-                 html.Li(html.B("하차"), style={'font-size': '110%', "color": COLORS["text"]}),
+                 html.Li(html.B("하차"), style={'font-size': '130%', "color": COLORS["text"]}),
                  dbc.Row([dcc.Graph(figure=page3_1_2, style={'width': '50%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
                           dcc.Graph(figure=page3_1_2_a, style={'width': '50%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),                 
                  html.Hr(style={'color': COLORS["text"]}),
                  #page3-2
-                 dbc.Row([html.H2(html.B("2. 시간대별 배차 실패지점 위치"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'}),
-                          html.H2(html.B("3. 시간대별 읍면동별 승객 대기시간 분포"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'})]),
+                 dbc.Row([html.H4(html.B("2. 시간대별 배차 실패지점 위치"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'}),
+                          html.H4(html.B("3. 시간대별 읍면동별 승객 대기시간 분포"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'})]),
                  html.Br(),
                  dbc.Row([dcc.Graph(figure=page3_2, style={'width': '50%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
                           dcc.Graph(figure=page3_3, style={'width': '50%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),
