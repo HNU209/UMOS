@@ -410,7 +410,10 @@ import plotly.graph_objects as go
 server = Flask(__name__)
 CORS(server)
 
-app = dash.Dash(__name__, server=server, 
+
+external_stylesheets = ['https://assets.codepen.io/8349312/custom-styles.css']
+
+app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 def build_banner():
@@ -539,8 +542,6 @@ build_tab_3 = [
 
 
 app.layout = html.Div([
-    html.Link(rel="stylesheet",
-              href="custom-styles.css"),
     html.Div(
     id="big-app-container",
     children=[
