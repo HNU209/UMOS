@@ -413,7 +413,7 @@ CORS(server)
 
 external_stylesheets = ['https://assets.codepen.io/8349312/custom-styles.css']
 
-app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets,
+app = dash.Dash(__name__, server=server,external_stylesheets=external_stylesheets,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
 
 def build_banner():
@@ -528,16 +528,12 @@ build_tab_3 = [
                           dcc.Graph(figure=page3_1_2_a, style={'width': '50%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),                 
                  html.Hr(style={'color': COLORS["text"]}),
                  #page3-2
+                 dbc.Row([html.H2(html.B("2. 시간대별 배차 실패지점 위치"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'}),
+                          html.H2(html.B("3. 시간대별 읍면동별 승객 대기시간 분포"), style={'color': COLORS["text"], 'width': '50%', 'display': 'inline-block'})]),
                  html.Br(),
-                 html.H2(html.B("2. 시간대별 배차 실패지점 위치"), style={'color': COLORS["text"]}),
-                 html.Br(),
-                 dcc.Graph(figure=page3_2),
-                 html.Hr(style={'color': COLORS["text"]}),
-                 #page3-3
-                 html.Br(),
-                 html.H2(html.B("3. 시간대별 읍면동별 승객 대기시간 분포"), style={'color': COLORS["text"]}),
-                 html.Br(),
-                 dcc.Graph(figure=page3_3)])
+                 dbc.Row([dcc.Graph(figure=page3_2, style={'width': '50%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
+                          dcc.Graph(figure=page3_3, style={'width': '50%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),
+                 html.Br()])
     ]
 
 
