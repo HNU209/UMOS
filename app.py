@@ -189,12 +189,13 @@ page2_2 = f"총 운행 차량 대수 : {len(taxi_final_inf)}대/일\n총 운행 
 
 # 3 
 taxi_driving_nm = (np.array(drive_tx) + np.array(empty_tx)).tolist()
-taxi_driving_nm_fig = px.area(x=[i for i in range(360, 1801)], y=taxi_driving_nm)
+taxi_driving_nm = taxi_driving_nm[::60]
+taxi_driving_nm_fig = px.bar(x=[i for i in range(6,31)], y=taxi_driving_nm)
 taxi_driving_nm_fig.update_layout(
     xaxis = dict(
         tickmode = 'array',
-        tickvals = [i for i in range(360,1801,60)],
-        ticktext = [f"{round(i/60)}시" for i in range(360,1801,60)],
+        tickvals = [i for i in range(6,31)],
+        ticktext = [f"{round(i)}시" for i in range(6,31)],
         title=""),
     yaxis = dict(
         tickmode = 'array',
