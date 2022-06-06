@@ -3,7 +3,7 @@ name: visualization
 on:
   push:
     paths:
-      - visualization/app.py
+      - visualization/**
     branches: [ tb_eom ]
 
 jobs:
