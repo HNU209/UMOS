@@ -133,7 +133,7 @@ page1_2b.update_layout(
            'x':0.5,
            'y':0.9},
     showlegend = True,
-    legend= dict(x=0.9, y=1.1),
+    legend= dict(x=0.9, y=0.9),
     margin={"l":0,"r":0,"b":0,"t":50,"pad":0},
     template="plotly_dark"
 )
@@ -385,6 +385,11 @@ for i in trips:
             ps_wait_inf.append([i["timestamps"][-1] - i["timestamps"][0] , Point([i["path"][-1][0], i["path"][-1][1]])])
 
 ps_wait_inf = gpd.GeoDataFrame(ps_wait_inf, columns = ["wait_time", "geometry"])
+
+fail_data = all_fail_data[["geometry"]]
+fail_data["wait_time"] = 30
+
+ps_wait_inf = pd.concat([fail_data, ps_wait_inf], axis=0)
 
 ps_wait_inf = gpd.sjoin(ps_wait_inf, hjd_20180401)
 
