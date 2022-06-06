@@ -187,6 +187,22 @@ taxi_final_inf["total_drive_time"] = taxi_final_inf["total_to_ps_drive_time"] + 
 
 page2_2 = f"총 운행 차량 대수 : {len(taxi_final_inf)}대/일\n총 운행 거리 : {round(taxi_final_inf[['total_ps_distance', 'total_ps_distance']].values.sum() / 1000)}km/일"
 
+# 3 
+taxi_driving_nm = (np.array(drive_tx) + np.array(empty_tx)).tolist()
+taxi_driving_nm_fig = px.area(x=[i for i in range(360, 1801)], y=taxi_driving_nm)
+taxi_driving_nm_fig.update_layout(
+    xaxis = dict(
+        tickmode = 'array',
+        tickvals = [i for i in range(360,1801,60)],
+        ticktext = [f"{round(i/60)}시" for i in range(360,1801,60)],
+        title=""),
+    yaxis = dict(
+        tickmode = 'array',
+        tickvals = [i for i in range(100,601,100)],
+        title="차량대수"),
+    margin={"l":0,"r":20,"b":0,"t":0,"pad":0},
+    template="plotly_dark")
+
 ### Page 3
 #start, end information
 ps_start_inf, ps_end_inf  = [],[]
@@ -490,8 +506,8 @@ build_tab_1 = [
                  html.H4(html.B("2. 승객 대기시간 분포"), style={"color": COLORS["text"]}),
                  html.Br(),
                  dbc.Row([dcc.Graph(figure=page1_2b, style={'width': '70%', 'display': 'inline-block', 'padding': '10 0 0 0'}),
-                          dcc.Graph(figure=page1_2a, style={'width': '30%', 'display': 'inline-block', 'padding': '0 0 0 10'})])]
-            )
+                          dcc.Graph(figure=page1_2a, style={'width': '30%', 'display': 'inline-block', 'padding': '0 0 0 10'})]),
+                 html.Br()])
     ]
     
 
@@ -504,14 +520,19 @@ build_tab_2 = [
                  html.Br(),
                  #page2-a
                  html.Li(html.B("차량 운행 기록 정보"), style={'font-size': '130%', "color": COLORS["text"]}),
-                 dbc.Alert([html.B(f" 총 운행 차량 대수: {len(taxi_final_inf)}대/일 | 총 운행 거리: {round(taxi_final_inf[['total_ps_distance', 'total_ps_distance']].values.sum() / 1000)}km/일, 총 운행 시간: {round(sum(taxi_final_inf['total_drive_time'])/60)}hour/일", 
+                 dbc.Alert([html.B(f" 총 운행 차량 대수: {len(taxi_final_inf)}대/일 | 총 운행 거리: {round(taxi_final_inf[['total_ps_distance', 'total_ps_distance']].values.sum() / 1000)}km/일, 총 운행 시간: {round(sum(taxi_final_inf['total_drive_time'])/60)}시/일", 
                                            style={'font-size':'130%', "color": COLORS["text"]})], color="#3c434a"),
                  #page2-b
                  html.Br(),
                  html.Li(html.B("시간대 별 전체 차량 운행 현황"), style={'font-size': '130%', "color": COLORS["text"]}),
-                 dcc.Graph(figure=page2_1)])
+                 dcc.Graph(figure=page2_1),
+                 html.Hr(style={"color": COLORS["text"]}),
+                 html.Br(),
+                 html.H4(html.B("2. 시간대 별 운영되는 차량 대수"), style={"color": COLORS["text"]}),
+                 html.Br(),
+                 dcc.Graph(figure=taxi_driving_nm_fig),
+                 html.Br()])
     ]
-
 
 build_tab_3 = [
         html.Div(
