@@ -108,7 +108,7 @@ def dispatch_module(passenger_locations, taxi_locations, fail_time, date, model)
         
         ### Passenger, Taxi 추가 및 제거
         # - 운행 종료 택시 제거 및 360(운행시작시간)에서는 미실행
-        if (i % 60 == 0) and (i != 360):
+        if i != 360:
             empty_taxi = empty_taxi.loc[empty_taxi.work_end >= i]
         # - 60분(1시간) 마다 출근 택시 추가
         if i % 60 == 0:
