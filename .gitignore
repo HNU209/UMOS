@@ -1,4 +1,5 @@
 visualization/node_modules/
+visualization/build/
 
 __pycache__/
 cache/
