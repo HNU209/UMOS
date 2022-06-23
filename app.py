@@ -1,13 +1,11 @@
 ###Load packages 
 import pandas as pd
-from sympy import false
 import geopandas as gpd
 import numpy as np
 import warnings 
 import plotly.express as px
 import plotly.graph_objects as go 
 from shapely.geometry import Point
-from my_azure_storage import *
 from flask import Flask
 from flask_cors import CORS
 
