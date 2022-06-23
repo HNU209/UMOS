@@ -11,4 +11,4 @@ def home():
 
 if __name__ == '__main__':
     print(socket.gethostbyname(socket.gethostname()))
-    app.run(host='0.0.0.0', port=8000)
+    app.run()
