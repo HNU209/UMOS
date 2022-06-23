@@ -1,6 +1,4 @@
-visualization/__pycache__/
-visualization/.env
-visualization/json/
+visualization/
 
 __pycache__/
 cache/
