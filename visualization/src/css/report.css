@@ -1,0 +1,83 @@
+.report-container {
+    background: linear-gradient(rgb(35, 50, 80), black);
+    /* padding: 1% 0; */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.report-header {
+    padding: 3% 0;
+    margin: 0;
+    border: 0;
+    text-align: center;
+    color: white;
+    height: 5vh;
+}
+.chart-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    
+}
+.chart-container > div {
+    padding-top: 2.5vh;
+    height: 30vh;
+}
+.legend-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.color-scale-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px;
+    border: white 1 solid;
+    width: 70%;
+}
+.color-scale-bar-title {
+    color: white;
+    height: 3vh;
+}
+.bar {
+    background: linear-gradient(90deg, yellow, red);
+    width: 70%;
+    height: 3vh;
+}
+.label {
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    height: 3vh;
+}
+.label > p {
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+.legend {
+    flex: 1;
+    width: 80%;
+    height: 10vh;
+    border: 1px solid white;
+    padding: 5px;
+}
+/* .chart2 {
+} */
+/* .time {
+    text-align: center;
+    margin: 20px 0px;
+} */
+/* .report-printing {
+    padding-left: 10px;
+}
+.report-printing > div {
+    padding-bottom: 20px;
+} */
